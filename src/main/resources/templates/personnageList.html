@@ -16,12 +16,21 @@
       <th>nom</th>
       <th>hp</th>
       <th>type</th>
+      <th>action</th>
     </tr>
     <tr th:each ="personnage : ${personnages}">
       <td th:text="${personnage.id}">id</td>
-      <td th:text="${personnage.nom}">nom</td>
+      <td><a th:href="@{/Personnages/{id} (id=${personnage.id})}" th:text="${personnage.nom}">nom</a></td>
       <td th:text="${personnage.hp}">hp</td>
       <td th:text="${personnage.type}">type</td>
+      <td >
+        <form th:action="@{/deletePersonnage/{id} (id=${personnage.id}) }" th:method="DELETE">
+        <button type="submit" class="deletebtn">Delete</button>
+        </form>
+        <form th:action="@{/Personnage/{id} (id=${personnage.id}) }" th:method="GET">
+<!--        <button type="submit" class="deletebtn">Delete</button>-->
+        </form>
+      </td>
     </tr>
   </table>
 </div>

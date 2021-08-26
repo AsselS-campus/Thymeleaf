@@ -12,6 +12,12 @@ public class PersonnageModel {
         this.hp = hp;
         this.type = type;
     }
+    public PersonnageModel() {
+        this.id = 100;
+        this.nom = "tooto";
+        this.hp = 2;
+        this.type = "aaaa";
+    }
 
     public int getId() {
         return id;

@@ -2,31 +2,44 @@ package com.example.thym.MainController;
 
 import com.example.thym.Form.PersonnageForm;
 import com.example.thym.model.PersonnageModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class MainController {
-    private static List<PersonnageModel> personnages=new ArrayList<PersonnageModel>();
+/*    private String APIURL = "http://localhost:8080";
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
+    }*/
+
+    private static List<PersonnageModel> personnages = new ArrayList<PersonnageModel>();
 
     static {
         personnages.add(new PersonnageModel(1, "Tyson Myke", 100, "guerrier"));
         personnages.add(new PersonnageModel(2, "Belfort Vitor", 110, "guerrier"));
         personnages.add(new PersonnageModel(3, "Khabib Nurmagomedov", 120, "guerrier"));
-        personnages.add(new PersonnageModel(3, "Badr Hary", 128, "guerrier"));
+        personnages.add(new PersonnageModel(4, "Badr Hari", 128, "guerrier"));
     }
 
     // Injectez (inject) via application.properties.
-/*    @Value("${welcome.message}")*/
-    private String message = "arzarzarzar";
+       @Value("${welcome.message}")
+    private String message = "Donjon et Dragons";
 
-    @RequestMapping(value = { "/", "/index" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public String index(Model model) {
 
         model.addAttribute("message", message);
@@ -34,7 +47,7 @@ public class MainController {
         return "index";
     }
 
-    @RequestMapping(value = { "/personnageList" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/personnageList"}, method = RequestMethod.GET)
     public String personnageList(Model model) {
 
         model.addAttribute("personnages", personnages);
@@ -42,7 +55,7 @@ public class MainController {
         return "personnageList";
     }
 
-    @RequestMapping(value = { "/addPersonnage" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/addPersonnage"}, method = RequestMethod.GET)
     public String showAddPersonnagePage(Model model) {
 
         PersonnageForm personnageForm = new PersonnageForm();
@@ -50,4 +63,42 @@ public class MainController {
 
         return "addPersonnage";
     }
+
+
+    @RequestMapping(value = {"/addPersonnage"}, method = RequestMethod.POST)
+    public String savePersonnage(Model model, //
+                                 @ModelAttribute("personnageForm") PersonnageModel personnageModel) {
+
+        if(personnageModel.getNom()==null||personnageModel.getNom().isEmpty()){
+
+            model.addAttribute("errorMessage", "il manque le nom");
+            return "addPersonnage";
+        }
+        personnages.add(personnageModel);
+        return "redirect:/personnageList";
+
+    }
+
+    //GET
+    //Récupérer un personnage par son id
+    @GetMapping(value = {"/Personnages/{id}"})
+    public String afficherUnPersonnage(Model model, @PathVariable int id) {
+        PersonnageModel personnage = new PersonnageModel();
+        for (PersonnageModel currentPersonnage : personnages) {
+            if (currentPersonnage.getId() == id) {
+                personnage = currentPersonnage;
+            }
+        }
+        System.out.println(personnage.getId());
+        model.addAttribute("personnage", personnage);
+        return "Personnage";
+    }
+
+    @RequestMapping(value = {"/deletePersonnage/{id}"}, method = RequestMethod.DELETE)
+    public String deletePersonnage(@PathVariable int id) {
+        personnages.removeIf(p -> p.getId() == id);
+        return "redirect:/personnageList";
+    }
 }
+
+
