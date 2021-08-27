@@ -1,22 +1,26 @@
 package com.example.thym.model;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class PersonnageModel {
+    public enum PersonnageType {
+        GUERRIER,
+        MAGE,
+        VOLEUR
+    }
+
+    private static AtomicInteger at = new AtomicInteger(1);
+
     private int id;
     private String nom;
     private int hp; //hint point
-    private String type;
+    private PersonnageType type;
 
-    public PersonnageModel(int id, String nom, int hp, String type) {
-        this.id = id;
+    public PersonnageModel(String nom, int hp, PersonnageType type) {
+        this.id = at.getAndIncrement();
         this.nom = nom;
         this.hp = hp;
         this.type = type;
-    }
-    public PersonnageModel() {
-        this.id = 100;
-        this.nom = "tooto";
-        this.hp = 2;
-        this.type = "aaaa";
     }
 
     public int getId() {
@@ -43,11 +47,11 @@ public class PersonnageModel {
         this.hp = hp;
     }
 
-    public String getType() {
+    public PersonnageType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(PersonnageType type) {
         this.type = type;
     }
 }

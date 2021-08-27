@@ -13,13 +13,13 @@
   <th>nom</th>
   <th>hp</th>
   <th>type</th>
-  <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Ffr.wikipedia.org%2Fwiki%2FMike_Tyson&psig=AOvVaw13RmUTl1nDE_Rjue9Ty_QA&ust=1630076149613000&source=images&cd=vfe&ved=0CAcQjRxqFwoTCJC0_Oj4zvICFQAAAAAdAAAAABAE">
+  <div th:if="${personnage.type == T(com.example.thym.model.PersonnageModel.PersonnageType).GUERRIER}"><img width="200" height="300" src="/guerrier.png"/></div>
+  <div th:if="${personnage.type == T(com.example.thym.model.PersonnageModel.PersonnageType).MAGE}"><img width="200" height="300" src="/mage.png"/></div>
 </tr>
   <td th:text="${personnage.id}">id</td>
   <td  th:text="${personnage.nom}">nom</a></td>
   <td th:text="${personnage.hp}">hp</td>
   <td th:text="${personnage.type}">type</td>
-  <td >
 
 
   </td>

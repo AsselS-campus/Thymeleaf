@@ -17,8 +17,7 @@
 
 <form th:action="@{/addPersonnage}"
       th:object="${personnageForm}" method="POST">
-    id:
-    <input type="text" th:field="*{id}" />
+
     <br/>
     nom:
     <input type="text" th:field="*{nom}" />
@@ -27,7 +26,10 @@
     <input type="text" th:field="*{hp}" />
     <br/>
     type:
-    <input type="text" th:field="*{type}" />
+    <select name="type">
+        <option th:each="personnageTypeOpt : ${T(com.example.thym.model.PersonnageModel.PersonnageType).values()}"
+                th:value="${personnageTypeOpt}" th:text="${personnageTypeOpt}"></option>
+    </select>
     <br/>
     <input type="submit" value="Create" />
 </form>

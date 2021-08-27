@@ -2,14 +2,10 @@ package com.example.thym.MainController;
 
 import com.example.thym.Form.PersonnageForm;
 import com.example.thym.model.PersonnageModel;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +25,14 @@ public class MainController {
     private static List<PersonnageModel> personnages = new ArrayList<PersonnageModel>();
 
     static {
-        personnages.add(new PersonnageModel(1, "Tyson Myke", 100, "guerrier"));
-        personnages.add(new PersonnageModel(2, "Belfort Vitor", 110, "guerrier"));
-        personnages.add(new PersonnageModel(3, "Khabib Nurmagomedov", 120, "guerrier"));
-        personnages.add(new PersonnageModel(4, "Badr Hari", 128, "guerrier"));
+        personnages.add(new PersonnageModel( "Tyson Myke", 100, PersonnageModel.PersonnageType.GUERRIER));
+        personnages.add(new PersonnageModel( "Belfort Vitor", 110, PersonnageModel.PersonnageType.MAGE));
+        personnages.add(new PersonnageModel( "Khabib Nurmagomedov", 120, PersonnageModel.PersonnageType.GUERRIER));
+        personnages.add(new PersonnageModel( "Badr Hari", 128, PersonnageModel.PersonnageType.MAGE));
+        personnages.add(new PersonnageModel( "Badr Hary", 129, PersonnageModel.PersonnageType.MAGE));
     }
 
-    // Injectez (inject) via application.properties.
+    //  Injectez (inject) via application.properties
        @Value("${welcome.message}")
     private String message = "Donjon et Dragons";
 
@@ -83,7 +80,7 @@ public class MainController {
     //Récupérer un personnage par son id
     @GetMapping(value = {"/Personnages/{id}"})
     public String afficherUnPersonnage(Model model, @PathVariable int id) {
-        PersonnageModel personnage = new PersonnageModel();
+        PersonnageModel personnage = null;
         for (PersonnageModel currentPersonnage : personnages) {
             if (currentPersonnage.getId() == id) {
                 personnage = currentPersonnage;
