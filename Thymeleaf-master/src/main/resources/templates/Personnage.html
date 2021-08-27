@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Personnage</h1>
+<div>
+  <table border="1">
+<tr>
+  <th>id</th>
+  <th>nom</th>
+  <th>hp</th>
+  <th>type</th>
+  <div th:if="${personnage.type == T(com.example.thym.model.PersonnageModel.PersonnageType).GUERRIER}"><img width="200" height="300" src="/guerrier.png"/></div>
+  <div th:if="${personnage.type == T(com.example.thym.model.PersonnageModel.PersonnageType).MAGE}"><img width="200" height="300" src="/mage.png"/></div>
+</tr>
+  <td th:text="${personnage.id}">id</td>
+  <td  th:text="${personnage.nom}">nom</a></td>
+  <td th:text="${personnage.hp}">hp</td>
+  <td th:text="${personnage.type}">type</td>
+
+
+  </td>
+</tr>
+  </table>
+</div>
+</body>
+</html>
