@@ -2,28 +2,31 @@ package com.example.thym.MainController;
 
 import com.example.thym.Form.PersonnageForm;
 import com.example.thym.model.PersonnageModel;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+
 public class MainController {
-/*    private String APIURL = "http://localhost:8080";
 
     @Autowired
     private RestTemplate restTemplate;
 
     @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+    public RestTemplate restTemplate(RestTemplateBuilder builder){
         return builder.build();
-    }*/
+    }
 
     private static List<PersonnageModel> personnages = new ArrayList<PersonnageModel>();
-
     static {
         personnages.add(new PersonnageModel( "Tyson Myke", 100, PersonnageModel.PersonnageType.GUERRIER));
         personnages.add(new PersonnageModel( "Belfort Vitor", 110, PersonnageModel.PersonnageType.MAGE));
@@ -33,22 +36,19 @@ public class MainController {
     }
 
     //  Injectez (inject) via application.properties
-       @Value("${welcome.message}")
+    @Value("${welcome.message}")
     private String message = "Donjon et Dragons";
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
     public String index(Model model) {
-
         model.addAttribute("message", message);
-
         return "index";
     }
 
     @RequestMapping(value = {"/personnageList"}, method = RequestMethod.GET)
     public String personnageList(Model model) {
-
+        List<PersonnageModel> personnages = restTemplate.getForObject("http://localhost:8081/personnages", List.class);
         model.addAttribute("personnages", personnages);
-
         return "personnageList";
     }
 
