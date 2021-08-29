@@ -23,11 +23,11 @@
     <input type="text" th:field="*{nom}" />
     <br/>
     hp:
-    <input type="text" th:field="*{hp}" />
+    <input type="number" th:field="*{hp}" />
     <br/>
     type:
     <select name="type">
-        <option th:each="personnageTypeOpt : ${T(com.example.thym.model.PersonnageModel.PersonnageType).values()}"
+        <option th:each="personnageTypeOpt : ${T(com.example.thym.Form.PersonnageForm.PersonnageType).values()}"
                 th:value="${personnageTypeOpt}" th:text="${personnageTypeOpt}"></option>
     </select>
     <br/>

@@ -1,10 +1,28 @@
 package com.example.thym.Form;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class PersonnageForm {
+    public enum PersonnageType {
+        GUERRIER,
+        MAGE,
+        VOLEUR
+    }
+
+
     private int id;
     private String nom;
     private int hp; //hint point
-    private String type;
+    private PersonnageType type;
+
+    public PersonnageForm() {}
+
+    public PersonnageForm(int id, String nom, int hp, PersonnageType type) {
+        this.id = id;
+        this.nom = nom;
+        this.hp = hp;
+        this.type = type;
+    }
 
     public int getId() {
         return id;
@@ -30,11 +48,11 @@ public class PersonnageForm {
         this.hp = hp;
     }
 
-    public String getType() {
+    public PersonnageType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(PersonnageType type) {
         this.type = type;
     }
 }

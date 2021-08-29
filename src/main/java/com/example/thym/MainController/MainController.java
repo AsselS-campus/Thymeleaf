@@ -1,22 +1,27 @@
 package com.example.thym.MainController;
 
 import com.example.thym.Form.PersonnageForm;
-import com.example.thym.model.PersonnageModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Controller
-
 public class MainController {
+
+    private static AtomicInteger at = new AtomicInteger(1);
 
     @Autowired
     private RestTemplate restTemplate;
@@ -26,13 +31,13 @@ public class MainController {
         return builder.build();
     }
 
-    private static List<PersonnageModel> personnages = new ArrayList<PersonnageModel>();
+    private static List<PersonnageForm> personnages = new ArrayList<PersonnageForm>();
     static {
-        personnages.add(new PersonnageModel( "Tyson Myke", 100, PersonnageModel.PersonnageType.GUERRIER));
-        personnages.add(new PersonnageModel( "Belfort Vitor", 110, PersonnageModel.PersonnageType.MAGE));
-        personnages.add(new PersonnageModel( "Khabib Nurmagomedov", 120, PersonnageModel.PersonnageType.GUERRIER));
-        personnages.add(new PersonnageModel( "Badr Hari", 128, PersonnageModel.PersonnageType.MAGE));
-        personnages.add(new PersonnageModel( "Badr Hary", 129, PersonnageModel.PersonnageType.MAGE));
+        personnages.add(new PersonnageForm(at.getAndIncrement(), "Tyson Myke", 100, PersonnageForm.PersonnageType.GUERRIER));
+        personnages.add(new PersonnageForm(at.getAndIncrement(), "Belfort Vitor", 110, PersonnageForm.PersonnageType.MAGE));
+        personnages.add(new PersonnageForm(at.getAndIncrement(), "Khabib Nurmagomedov", 120, PersonnageForm.PersonnageType.GUERRIER));
+        personnages.add(new PersonnageForm(at.getAndIncrement(), "Badr Hari", 128, PersonnageForm.PersonnageType.MAGE));
+        personnages.add(new PersonnageForm(at.getAndIncrement(), "Badr Hary", 129, PersonnageForm.PersonnageType.MAGE));
     }
 
     //  Injectez (inject) via application.properties
@@ -47,7 +52,13 @@ public class MainController {
 
     @RequestMapping(value = {"/personnageList"}, method = RequestMethod.GET)
     public String personnageList(Model model) {
-        List<PersonnageModel> personnages = restTemplate.getForObject("http://localhost:8081/personnages", List.class);
+        // METHODE 1: on utilise directement la variable globale 'personnages'
+
+        // METHODE 2: utilise le webservice tiers
+        ResponseEntity<PersonnageForm[]> response = restTemplate.getForEntity("http://localhost:8081/personnages", PersonnageForm[].class);
+        personnages = new ArrayList<PersonnageForm>();
+        Collections.addAll(personnages, response.getBody());
+
         model.addAttribute("personnages", personnages);
         return "personnageList";
     }
@@ -64,14 +75,21 @@ public class MainController {
 
     @RequestMapping(value = {"/addPersonnage"}, method = RequestMethod.POST)
     public String savePersonnage(Model model, //
-                                 @ModelAttribute("personnageForm") PersonnageModel personnageModel) {
+                                 @ModelAttribute("personnageForm") PersonnageForm personnageForm) {
 
-        if(personnageModel.getNom()==null||personnageModel.getNom().isEmpty()){
+        personnageForm.setId(at.getAndIncrement());
+        if(personnageForm.getNom()==null||personnageForm.getNom().isEmpty()){
 
             model.addAttribute("errorMessage", "il manque le nom");
             return "addPersonnage";
         }
-        personnages.add(personnageModel);
+        // METHODE 1: utilise la variable globale 'personnages'
+        // personnages.add(personnageForm);
+
+        // METHODE 2: utilise le webservice tiers
+        HttpEntity<PersonnageForm> request = new HttpEntity<>(personnageForm);
+        restTemplate.postForObject("http://localhost:8081/personnages",request, PersonnageForm.class);
+
         return "redirect:/personnageList";
 
     }
@@ -80,8 +98,8 @@ public class MainController {
     //Récupérer un personnage par son id
     @GetMapping(value = {"/Personnages/{id}"})
     public String afficherUnPersonnage(Model model, @PathVariable int id) {
-        PersonnageModel personnage = null;
-        for (PersonnageModel currentPersonnage : personnages) {
+        PersonnageForm personnage = null;
+        for (PersonnageForm currentPersonnage : personnages) {
             if (currentPersonnage.getId() == id) {
                 personnage = currentPersonnage;
             }
