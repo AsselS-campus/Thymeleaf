@@ -1,7 +1,5 @@
 package com.example.thym.Form;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class PersonnageForm {
     public enum PersonnageType {
         GUERRIER,
