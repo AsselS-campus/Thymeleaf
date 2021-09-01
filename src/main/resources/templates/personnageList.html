@@ -28,8 +28,13 @@
         <button type="submit" class="deletebtn">Delete</button>
         </form>
         <form th:action="@{/Personnage/{id} (id=${personnage.id}) }" th:method="GET">
+
 <!--        <button type="submit" class="deletebtn">Delete</button>-->
         </form>
+        <a th:href="@{/updatePersonnage/{id} (id=${personnage.id}) }" >
+          <button type="submit" class="updatebtn">Update</button>
+        </a>
+
       </td>
     </tr>
   </table>

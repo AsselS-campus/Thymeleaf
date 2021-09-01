@@ -1,12 +1,6 @@
 package com.example.thym.Form;
 
 public class PersonnageForm {
-    public enum PersonnageType {
-        GUERRIER,
-        MAGE,
-        VOLEUR
-    }
-
 
     private int id;
     private String nom;

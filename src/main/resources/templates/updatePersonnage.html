@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Update Personnage</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<h1>Update a Personnage:</h1>
+
+
+<!--
+   In Thymeleaf the equivalent of
+   JSP's ${pageContext.request.contextPath}/edit.html
+   would be @{/edit.html}
+   -->
+
+<form th:action="@{/updatePersonnage/{id} (id=${personnageForm.id})}"
+      th:object="${personnageForm}" th:method="POST">
+
+  <input type="hidden" th:field="*{id}" />
+  <br/>
+  nom:
+  <input type="text" th:field="*{nom}" />
+  <br/>
+  hp:
+  <input type="number" th:field="*{hp}" />
+  <br/>
+  type:
+  <select th:field="*{type}">
+    <option th:each="personnageTypeOpt : ${T(com.example.thym.Form.PersonnageType).values()}"
+            th:value="${personnageTypeOpt}" th:text="${personnageTypeOpt}"></option>
+  </select>
+  <br/>
+  <input type="submit" value="Update" />
+</form>
+
+
+
+<br/>
+
+<!-- Check if errorMessage is not null and not empty -->
+
+<div th:if="${errorMessage}" th:text="${errorMessage}"
+     style="color:red;font-style:italic;">
+  ...
+
+</div>
+
+</body>
+</html>

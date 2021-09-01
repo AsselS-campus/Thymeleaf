@@ -13,8 +13,8 @@
   <th>nom</th>
   <th>hp</th>
   <th>type</th>
-  <div th:if="${personnage.type == T(com.example.thym.Form.PersonnageForm.PersonnageType).GUERRIER}"><img width="200" height="300" src="/guerrier.png"/></div>
-  <div th:if="${personnage.type == T(com.example.thym.Form.PersonnageForm.PersonnageType).MAGE}"><img width="200" height="300" src="/mage.png"/></div>
+  <div th:if="${personnage.type == T(com.example.thym.Form.PersonnageType).GUERRIER}"><img width="200" height="300" src="/guerrier.png"/></div>
+  <div th:if="${personnage.type == T(com.example.thym.Form.PersonnageType).MAGE}"><img width="200" height="300" src="/mage.png"/></div>
 </tr>
   <td th:text="${personnage.id}">id</td>
   <td  th:text="${personnage.nom}">nom</a></td>
